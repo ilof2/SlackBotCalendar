@@ -130,3 +130,6 @@ dmypy.json
 
 #other
 .idea/
+google_calendar/credentials.json
+token.pickle
+creds.py
