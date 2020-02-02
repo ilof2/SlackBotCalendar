@@ -8,13 +8,10 @@ from google.auth.transport.requests import Request
 
 
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
 def get_events(count=10):
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
-    """
     g_creds = None
     result_list = []
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -64,3 +61,41 @@ def get_events(count=10):
         result_list.append(event)
 
     return result_list
+
+
+def get_users():
+    g_creds = None
+    result_list = []
+    if os.path.exists("token.pickle"):
+        with open("token.pickle", "rb") as token:
+            g_creds = pickle.load(token)
+    if not g_creds or not g_creds.valid:
+        if g_creds and g_creds.expired and g_creds.refresh_token:
+            g_creds.refresh(Request())
+        else:
+            creds_json = os.path.abspath("google_calendar/credentials.json")
+            flow = InstalledAppFlow.from_client_secrets_file(creds_json, SCOPES)
+            g_creds = flow.run_local_server(port=0)
+        with open("token.pickle", "wb") as token:
+            pickle.dump(g_creds, token)
+
+    service = build("calendar", "v3", credentials=g_creds)
+
+    # Call the Calendar API
+    calendar_id = os.environ.get("calendar_id", None)
+    users_result = (
+        service.acl().list(calendarId=calendar_id).execute()
+    )
+    events = users_result.get("items", [])
+
+    for event in events:
+        result_list.append({
+            "email": event['scope']['value'],
+            "role": event['role'],
+        })
+
+    return result_list
+
+
+if __name__ == "__main__":
+    print(get_users())

@@ -4,14 +4,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+
+[packages]
 google-api-python-client = "*"
 google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
-black = "*"
-
-[packages]
-django = "*"
 celery = "*"
+djongo = "*"
+django = "==2.2.9"
 
 [requires]
 python_version = "3.7"
