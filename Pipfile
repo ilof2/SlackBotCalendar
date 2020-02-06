@@ -8,10 +8,13 @@ verify_ssl = true
 [packages]
 google-api-python-client = "*"
 google-auth-httplib2 = "*"
-google-auth-oauthlib = "*"
 celery = "*"
-djongo = "*"
-django = "==2.2.9"
+requests = "*"
+slackclient = "==1.2.1"
+redis = "*"
+boto3 = "*"
+awscli = "*"
+fpdf2 = "*"
 
 [requires]
 python_version = "3.7"
